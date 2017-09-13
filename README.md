@@ -1,3 +1,3 @@
-#Show My Seven Segments
+# Show My Seven Segments
 
-## App created using create-react-app by Bonampa312
+###### App created using `create-react-app` by *Bonampa312*
