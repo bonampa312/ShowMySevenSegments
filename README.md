@@ -6,7 +6,9 @@ NodeJs and npm needed to build this application, watch [here](https://docs.npmjs
 
 You can run this app using the commands:
 
-`npm install
-npm start`
+```
+npm install
+npm start
+```
 
 
