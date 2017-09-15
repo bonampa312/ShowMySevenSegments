@@ -3,16 +3,16 @@ import logo from './logo.svg';
 import './App.css';
 
 const numberSegments = [
-  {one: '_', two: '| |', three: '|_|'},
-  {one: ' ', two: ' |', three: ' |'},
-  {one: '_', two: '_|', three: '|_'},
-  {one: '_', two: '_|', three: '_|'},
-  {one: ' ', two: '|_|', three: ' |'},
-  {one: '_', two: '|_', three: '_|'},
-  {one: '_', two: '|_', three: '|_|'},
-  {one: '_', two: ' |', three: ' |'},
-  {one: '_', two: '|_|', three: '|_|'},
-  {one: '_', two: '|_|', three: '_|'},
+  {one: ' _ ', two: '| |', three: '|_|'},
+  {one: '   ', two: '  |', three: '  |'},
+  {one: ' _ ', two: ' _|', three: '|_ '},
+  {one: ' _ ', two: ' _|', three: ' _|'},
+  {one: '   ', two: '|_|', three: '  |'},
+  {one: ' _ ', two: '|_ ', three: ' _|'},
+  {one: ' _ ', two: '|_ ', three: '|_|'},
+  {one: ' _ ', two: '  |', three: '  |'},
+  {one: ' _ ', two: '|_|', three: '|_|'},
+  {one: ' _ ', two: '|_|', three: ' _|'},
 ]
 
 class App extends Component {
@@ -31,7 +31,10 @@ class App extends Component {
 
   handleNumberChange(event){
     var numberEnter = event.target.value;
-    if (!isNaN(numberEnter)) {
+    var numLines = numberEnter.split("\n");
+    console.log(numLines);
+
+    if (/[0-9]/.test(numberEnter)) {
       var numberArray = numberEnter.split("");
 
       this.setState({numberOut: numberEnter})
@@ -59,9 +62,9 @@ class App extends Component {
   render() {
 
     var lines = [
-      <div>{this.state.lineOne}</div>, <br/>,
-      <div>{this.state.lineTwo}</div>, <br/>,
-      <div>{this.state.lineThree}</div>
+      <pre className="pre-style">{this.state.lineOne}&nbsp;&nbsp;</pre>,
+      <pre className="pre-style">{this.state.lineTwo}&nbsp;&nbsp;</pre>,
+      <pre className="pre-style">{this.state.lineThree}&nbsp;&nbsp;</pre>
     ]
 
     return (

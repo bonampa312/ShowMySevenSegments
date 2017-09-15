@@ -18,9 +18,9 @@
   font-size: large;
 }
 
-.Seven-segments {
-  font-size: large;
-  font-family: "consolas"; 
+.pre-style {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  margin: 0;
 }
 
 @keyframes App-logo-spin {
