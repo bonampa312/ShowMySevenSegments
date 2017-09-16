@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import logo from './Pacman.png';
 import './App.css';
 
 var _ = require('underscore')
 
 const numbersSegments = [
-  '010101101',
+  '010101111',
   '000001001',
   '010011110',
   '010011011',
@@ -54,7 +54,7 @@ class App extends Component {
       console.log("HEre");
       console.log(numValues[0].length);
       if (numValues.length === 2 && numValues[0]>0
-        && numValues[0]<10){
+        && numValues[0]<=10){
         this.setState({digitSize: numValues[0]})
         var segmentsMatrix = _.range(numValues[0]*2+1).map(function() {
           return _.range(numValues[0]*2+1).map(function() {
@@ -95,6 +95,7 @@ class App extends Component {
     for (let i = 0; i < props.digitSize*2+1; i++) {
       props.digitsLine[i]="";
     }
+    this.setState({digitsLine: props.digitsLine})
     numArray.forEach( function(num) {
       var numberBinary = numbersSegments[num].split("")
       // First row from seven segments matrix
@@ -148,6 +149,7 @@ class App extends Component {
         props.digitsLine[i] = props.digitsLine[i]+'  '+matrixRow.join('');
       }
     })
+    this.setState({digitsLine: props.digitsLine})
   }
 
   listLines() {
@@ -173,12 +175,10 @@ class App extends Component {
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Lets convert some numbers</h2>
+          <br/>
+          <input type="text" value={this.state.number} onChange={this.handleNumberChange}/>
         </div>
         <div className="App-intro">
-          <label>
-          Number:{' '}
-          <input type="text" value={this.state.number} onChange={this.handleNumberChange}/>
-          </label>
           <br/>
           <label>{this.state.numberOut}</label>
           <br/>

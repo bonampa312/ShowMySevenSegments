@@ -9,16 +9,21 @@
 
 .App-header {
   background-color: #222;
-  height: 150px;
+  width: 700px;
+  border-radius: 20px;
   padding: 20px;
   color: white;
+  margin: auto;
+  margin-top: 20px;
 }
 
 .App-intro {
   font-size: large;
+  color: white;
 }
 
 .pre-style {
+  font: bold 20px Consolas, serif;
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
   margin: 0;
 }
