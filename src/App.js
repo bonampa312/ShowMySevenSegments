@@ -7,7 +7,7 @@ var _ = require('underscore')
 const numbersSegments = [
   '010101101',
   '000001001',
-  '010111110',
+  '010011110',
   '010011011',
   '000111001',
   '010110011',
@@ -50,13 +50,14 @@ class App extends Component {
   handleNumberChange(event){
     var numberEnter = event.target.value;
     var numValues = numberEnter.split(",");
-
     if (/^[0-9]+\,?[0-9]*$/.test(numberEnter) || /^[0-9]$/.test(numberEnter)) {
-      // console.log(numValues);
-      if (numValues.length === 2 && numValues[0]>0 && numValues[0]<10){
+      console.log("HEre");
+      console.log(numValues[0].length);
+      if (numValues.length === 2 && numValues[0]>0
+        && numValues[0]<10){
         this.setState({digitSize: numValues[0]})
-        var segmentsMatrix = _.range(numValues[0]).map(function() {
-          return _.range(numValues[0]).map(function() {
+        var segmentsMatrix = _.range(numValues[0]*2+1).map(function() {
+          return _.range(numValues[0]*2+1).map(function() {
             return " ";
           })
         })
@@ -71,8 +72,8 @@ class App extends Component {
       }
       this.setState({number: numberEnter})
     } else {
-      this.setState({numberOut : "Please use the format x,y"})
-      // this.setState({number : numberEnter})
+      this.setState({numberOut : "Please use the format size,value"})
+      this.setState({number : numberEnter})
     }
   }
 
@@ -80,46 +81,88 @@ class App extends Component {
     props.lineOne = ''
     props.lineTwo = ''
     props.lineThree = ''
-    // console.log(props.digitsLine)
     numArray.forEach( function(num) {
-      // console.log(numberSegments[num]);
       props.lineOne = props.lineOne + " " + numberSegments[num].one;
       props.lineTwo = props.lineTwo + " " + numberSegments[num].two
       props.lineThree = props.lineThree + " " + numberSegments[num].three
     })
     this.fillSegMatrix(numArray, props)
+    console.log("this is the lines: ",props.digitsLine)
   }
 
+  // Creates an array with the characters of the number ingressed in 7 segments
   fillSegMatrix(numArray, props){
     for (let i = 0; i < props.digitSize*2+1; i++) {
       props.digitsLine[i]="";
     }
     numArray.forEach( function(num) {
       var numberBinary = numbersSegments[num].split("")
-      console.log(props.digitSize)
+      // First row from seven segments matrix
       if (numberBinary[1]==="1"){
-        for (let i = 0; i < (props.digitSize*2+1); i++) {
-          console.log(i%(props.digitSize*2+1))
-          props.digitsMatrix[0][i]= numberBinary[i%(props.digitSize*2+1)]==='0' ? ' ' : '_'
+        for (let i = 0; i < (props.digitSize*2); i++) {
+          props.digitsMatrix[0][i]= (i%2)===0 ? ' ' : '_'
         }
       } else {
         for (let i = 0; i < (props.digitSize*2+1); i++) {
-          console.log("array"+i)
           props.digitsMatrix[0][i]=" "
         }
       }
-      console.log(props.digitsMatrix)
+      // Rows 2 - n-1 from seven segments matrix
+      for (let i = 1; i <= (props.digitSize); i++) {
+        props.digitsMatrix[i][0]=numberBinary[3]==='0' ? ' ' : '|'
+        props.digitsMatrix[i][(props.digitSize*2)]=numberBinary[5]==='0' ? ' ' : '|'
+      }
+      // Row n from seven segments matrix
+      if (numberBinary[4]==="1"){
+        for (let i = 1; i < (props.digitSize*2); i++) {
+          props.digitsMatrix[props.digitSize][i]= (i%2)===0 ? ' ' : '_'
+        }
+      } else {
+        for (let i = 1; i < (props.digitSize*2); i++) {
+          props.digitsMatrix[props.digitSize][i]=" "
+        }
+      }
+      // Rows n+1 - n*2+1 from seven segments matrix
+      let i = props.digitSize;
+      i++;
+      for (; i <= props.digitSize*2; i++) {
+        props.digitsMatrix[i][0]=numberBinary[6]==='0' ? ' ' : '|'
+        props.digitsMatrix[i][(props.digitSize*2)]=numberBinary[8]==='0' ? ' ' : '|'
+      }
+      // Last row from seven segments matrix
+      if (numberBinary[7]==="1"){
+        for (let i = 1; i < (props.digitSize*2); i++) {
+          props.digitsMatrix[props.digitSize*2][i]= (i%2)===0 ? ' ' : '_'
+        }
+      } else {
+        for (let i = 1; i < (props.digitSize*2); i++) {
+          props.digitsMatrix[props.digitSize*2][i]=" "
+        }
+      }
+      // Fill the lines strings with theseven segments matrix data
+      for (let i = 0; i <= props.digitSize*2; i++) {
+        var matrixRow = [];
+        for (let j = 0; j <= props.digitSize*2; j++) {
+          matrixRow.push(props.digitsMatrix[i][j])
+        }
+        props.digitsLine[i] = props.digitsLine[i]+'  '+matrixRow.join('');
+      }
     })
+  }
+
+  listLines() {
+    var lines = this.state.digitsLine;
+    console.log("abc",lines)
+    var listLines = lines.map((line) => <pre className="pre-style">{line}</pre>);
+    console.log(listLines)
+    return(
+      <div className="Seven-segments">{listLines}</div>
+    )
   }
 
   render() {
 
-    var lines = [
-      <pre className="pre-style">{this.state.lineOne}&nbsp;&nbsp;</pre>,
-      <pre className="pre-style">{this.state.lineTwo}&nbsp;&nbsp;</pre>,
-      <pre className="pre-style">{this.state.lineThree}&nbsp;&nbsp;</pre>
-    ]
-    var lines2 = [
+    var linesSmall = [
       <pre className="pre-style">{this.state.lineOne}&nbsp;&nbsp;</pre>,
       <pre className="pre-style">{this.state.lineTwo}&nbsp;&nbsp;</pre>,
       <pre className="pre-style">{this.state.lineThree}&nbsp;&nbsp;</pre>
@@ -140,8 +183,9 @@ class App extends Component {
           <label>{this.state.numberOut}</label>
           <br/>
           <div className="Seven-segments">
-            <div>{lines}</div>
+            <div>{linesSmall}</div>
           </div>
+          <div>{this.listLines()}</div>
         </div>
       </div>
     );
